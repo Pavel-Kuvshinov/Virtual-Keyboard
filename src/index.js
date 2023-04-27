@@ -6,6 +6,9 @@ const keyLayouts = {
     16, 90, 88, 67, 86, 66, 78, 77, 188, 190, 191, 38, 16,
     17, 999, 18, 32, 18, 37, 40, 39, 17,
   ],
+  functionableKeyCodes: [
+    8, 9, 46, 20, 13, 38, 16, 17, 999, 18, 32, 37, 40, 39,
+  ],
   en: [
     '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace',
     'Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\', 'Del',
@@ -25,10 +28,11 @@ const keyLayouts = {
 const keyboardSettings = {
   lang: 'en',
   value: '',
+  capsLock: false,
+  shift: false,
 };
 
 function createElements() {
-  // create main element
   const main = document.createElement('main');
   main.classList.add('main');
   document.querySelector('body').prepend(main);
@@ -91,6 +95,17 @@ function createKeyboardKeys() {
   });
 }
 
+function capslockToggle() {
+  keyboardSettings.capsLock = !keyboardSettings.capsLock;
+  Array.from(document.querySelectorAll('.keyboard_key')).forEach((item) => {
+    const keyItem = item;
+    if (!keyLayouts.functionableKeyCodes.includes(Number(keyItem.dataset.key))) {
+      if (keyboardSettings.capsLock) keyItem.textContent = keyItem.textContent.toUpperCase();
+      if (!keyboardSettings.capsLock) keyItem.textContent = keyItem.textContent.toLowerCase();
+    }
+  });
+}
+
 function keysCheckCode(code, text) {
   if (code === 13) {
     keyboardSettings.value += '\n';
@@ -103,7 +118,7 @@ function keysCheckCode(code, text) {
   } else if (code === 9) {
     keyboardSettings.value += '    ';
   } else if (code === 20) {
-    console.log('CapsLK'); // CapsLook button
+    capslockToggle();
   } else if (code === 16) {
     console.log('Shift'); // Shift button
   } else if (code === 17) {
@@ -120,6 +135,8 @@ function keysCheckCode(code, text) {
     console.log('Down'); // Down button
   } else if (code === 39) {
     console.log('Right'); // Right button
+  } else if (code === 999) {
+    console.log('Lang'); // Lang button
   } else {
     keyboardSettings.value += text;
     console.log(keyboardSettings.value);
