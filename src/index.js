@@ -30,6 +30,7 @@ const keyboardSettings = {
   value: '',
   capsLock: false,
   shift: false,
+  cursorPosition: 0,
 };
 
 function createElements() {
@@ -40,6 +41,7 @@ function createElements() {
   const textArea = document.createElement('textarea');
   textArea.classList.add('input_field');
   document.querySelector('.main').prepend(textArea);
+  document.querySelector('.input_field').autofocus = true;
 
   const description = document.createElement('section');
   description.classList.add('description');
@@ -106,21 +108,54 @@ function capslockToggle() {
   });
 }
 
-function keysCheckCode(code, text) {
-  if (code === 13) {
+function shiftToggle() {
+  keyboardSettings.shift = !keyboardSettings.shift;
+}
+
+function deleteToggle() {
+  if (keyboardSettings.cursorPosition !== 0) {
+    keyboardSettings.value = keyboardSettings.value.slice(0, keyboardSettings.cursorPosition)
+  + keyboardSettings.value.slice(keyboardSettings.cursorPosition + 1);
+  }
+}
+
+function langChange() {
+  if (keyboardSettings.lang === 'en') {
+    keyboardSettings.lang = 'ru';
+    Array.from(document.querySelectorAll('.keyboard_key')).forEach((item, index) => {
+      const keyItem = item;
+      keyItem.textContent = keyLayouts.ru[index];
+    });
+  } else if (keyboardSettings.lang === 'ru') {
+    keyboardSettings.lang = 'en';
+    Array.from(document.querySelectorAll('.keyboard_key')).forEach((item, index) => {
+      const keyItem = item;
+      keyItem.textContent = keyLayouts.en[index];
+    });
+  }
+}
+
+function keysCheckCode(code, text, event) {
+  if ((event.ctrlKey && event.shiftKey) || (event.altKey && event.shiftKey)) {
+    langChange();
+  } else if (code === 13) {
     keyboardSettings.value += '\n';
   } else if (code === 8) {
     const propValue = keyboardSettings.value;
     keyboardSettings.value = propValue.substring(0, propValue.length - 1);
-    console.log(keyboardSettings.value);
   } else if (code === 46) {
-    console.log('Del'); // Delete button
+    deleteToggle();
+    document.querySelector('.input_field').focus();
+    setTimeout(() => {
+      document.querySelector('.input_field').selectionEnd = keyboardSettings.cursorPosition;
+      document.querySelector('.input_field').selectionStart = keyboardSettings.cursorPosition;
+    }, 1);
   } else if (code === 9) {
     keyboardSettings.value += '    ';
   } else if (code === 20) {
     capslockToggle();
   } else if (code === 16) {
-    console.log('Shift'); // Shift button
+    shiftToggle();
   } else if (code === 17) {
     console.log('Ctrl'); // Ctrl button
   } else if (code === 18) {
@@ -136,18 +171,31 @@ function keysCheckCode(code, text) {
   } else if (code === 39) {
     console.log('Right'); // Right button
   } else if (code === 999) {
-    console.log('Lang'); // Lang button
+    langChange();
   } else {
     keyboardSettings.value += text;
-    console.log(keyboardSettings.value);
+    // console.log(keyboardSettings.value);
   }
+}
+
+function textfieldValueUpdate() {
+  document.querySelector('.input_field').value = keyboardSettings.value;
+}
+
+function textfieldCheck() {
+  document.querySelector('.input_field').addEventListener('click', () => {
+    keyboardSettings.cursorPosition = document.querySelector('.input_field').selectionStart;
+  });
+  document.querySelector('.input_field').addEventListener('input', () => {
+    document.querySelector('.input_field').value = keyboardSettings.value;
+  });
 }
 
 function keyboardKeysClick() {
   document.querySelector('.keyboard').addEventListener('click', (e) => {
     if (e.target.classList.contains('button')) {
-      keysCheckCode(Number(e.target.dataset.key), e.target.textContent);
-      // console.log(e);
+      keysCheckCode(Number(e.target.dataset.key), e.target.textContent, e);
+      textfieldValueUpdate();
     }
   });
 }
@@ -155,8 +203,8 @@ function keyboardKeysClick() {
 function keyboardKeysToggle() {
   document.addEventListener('keydown', (e) => {
     if (keyLayouts.keyCodes.includes(e.keyCode)) {
-      keysCheckCode(e.keyCode, e.key);
-      // console.log(e);
+      keysCheckCode(e.keyCode, e.key, e);
+      textfieldValueUpdate();
     }
   });
 }
@@ -164,6 +212,7 @@ function keyboardKeysToggle() {
 window.addEventListener('DOMContentLoaded', () => {
   createElements();
   createKeyboardKeys();
+  textfieldCheck();
   keyboardKeysClick();
   keyboardKeysToggle();
 });
