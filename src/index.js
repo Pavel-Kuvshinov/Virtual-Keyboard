@@ -23,6 +23,18 @@ const keyLayouts = {
     'Shift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', 'Up', 'Shift',
     'Ctrl', 'Lang', 'Alt', 'Space', 'Alt', 'Left', 'Down', 'Right', 'Ctrl',
   ],
+  enShiftKeys: [
+    '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '{', '}', '|', ':', '"', '<', '>', '?',
+  ],
+  enNonShiftKeys: [
+    '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '[', ']', '\\', ';', '\'', ',', '.', '/',
+  ],
+  ruShiftKeys: [
+    '!', '"', '№', ';', '%', ':', '?', '*', '(', ')', '_', '+', '/', ',',
+  ],
+  ruNonShiftKeys: [
+    '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\\', '.',
+  ],
 };
 
 const keyboardSettings = {
@@ -108,8 +120,34 @@ function capslockToggle() {
   });
 }
 
+// Shift function must be finished
 function shiftToggle() {
   keyboardSettings.shift = !keyboardSettings.shift;
+  Array.from(document.querySelectorAll('.keyboard_key')).forEach((item) => {
+    const keyItem = item;
+    if (keyItem.textContent.toLowerCase().match(/^[a-zа-яё]+$/) && keyItem.textContent.length < 2) {
+      if (keyboardSettings.shift) keyItem.textContent = keyItem.textContent.toUpperCase();
+      if (!keyboardSettings.shift) keyItem.textContent = keyItem.textContent.toLowerCase();
+    }
+    if (!keyItem.textContent.toLowerCase().match(/^[a-zа-яё]+$/) && keyItem.textContent.length < 2) {
+      if (keyboardSettings.lang === 'en' && keyboardSettings.shift) {
+        const memIndex = (keyLayouts.enNonShiftKeys).indexOf(keyItem.textContent);
+        keyItem.textContent = keyLayouts.enShiftKeys[memIndex];
+      }
+      if (keyboardSettings.lang === 'en' && !keyboardSettings.shift) {
+        const memIndex = (keyLayouts.enShiftKeys).indexOf(keyItem.textContent);
+        keyItem.textContent = keyLayouts.enNonShiftKeys[memIndex];
+      }
+      if (keyboardSettings.lang === 'ru' && keyboardSettings.shift) {
+        const memIndex = (keyLayouts.ruNonShiftKeys).indexOf(keyItem.textContent);
+        keyItem.textContent = keyLayouts.ruShiftKeys[memIndex];
+      }
+      if (keyboardSettings.lang === 'ru' && !keyboardSettings.shift) {
+        const memIndex = (keyLayouts.ruShiftKeys).indexOf(keyItem.textContent);
+        keyItem.textContent = keyLayouts.ruNonShiftKeys[memIndex];
+      }
+    }
+  });
 }
 
 function deleteToggle() {
@@ -174,7 +212,6 @@ function keysCheckCode(code, text, event) {
     langChange();
   } else {
     keyboardSettings.value += text;
-    // console.log(keyboardSettings.value);
   }
 }
 
