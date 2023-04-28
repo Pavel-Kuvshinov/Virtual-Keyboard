@@ -57,6 +57,7 @@
   -webkit-box-shadow: 1px 1px 3px 0px rgba(107, 107, 107, 0.41);
   -moz-box-shadow: 1px 1px 3px 0px rgba(107, 107, 107, 0.41);
   box-shadow: 1px 1px 3px 0px rgba(107, 107, 107, 0.41);
+  transition: all .1s ease;
 }
 
 .keyboard_key:hover {
@@ -64,6 +65,12 @@
 }
 
 .keyboard_key:active {
+  background-color: #2D2D2D;
+  border: 1px solid #808182;
+  border-radius: 10px;
+}
+
+.keyboard_key-active {
   background-color: #2D2D2D;
   border: 1px solid #808182;
   border-radius: 10px;

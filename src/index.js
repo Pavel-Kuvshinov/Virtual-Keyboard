@@ -120,7 +120,6 @@ function capslockToggle() {
   });
 }
 
-// Shift function must be finished
 function shiftToggle() {
   keyboardSettings.shift = !keyboardSettings.shift;
   Array.from(document.querySelectorAll('.keyboard_key')).forEach((item) => {
@@ -242,6 +241,11 @@ function keyboardKeysToggle() {
     if (keyLayouts.keyCodes.includes(e.keyCode)) {
       keysCheckCode(e.keyCode, e.key, e);
       textfieldValueUpdate();
+      const key = document.querySelector(`.keyboard_key[data-key="${e.keyCode}"]`);
+      key.classList.toggle('keyboard_key-active');
+      setTimeout(() => {
+        key.classList.toggle('keyboard_key-active');
+      }, 100);
     }
   });
 }
