@@ -242,10 +242,10 @@ function keyboardKeysToggle() {
       keysCheckCode(e.keyCode, e.key, e);
       textfieldValueUpdate();
       const key = document.querySelector(`.keyboard_key[data-key="${e.keyCode}"]`);
-      key.classList.toggle('keyboard_key-active');
-      setTimeout(() => {
-        key.classList.toggle('keyboard_key-active');
-      }, 100);
+      key.classList.add('keyboard_key-active');
+      document.addEventListener('keyup', () => {
+        key.classList.remove('keyboard_key-active');
+      });
     }
   });
 }
