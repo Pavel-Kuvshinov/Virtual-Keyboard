@@ -152,19 +152,27 @@ function shiftToggle() {
 function deleteToggle() {
   if (keyboardSettings.cursorPosition !== 0) {
     keyboardSettings.value = keyboardSettings.value.slice(0, keyboardSettings.cursorPosition)
-  + keyboardSettings.value.slice(keyboardSettings.cursorPosition + 1);
+      + keyboardSettings.value.slice(keyboardSettings.cursorPosition + 1);
+  }
+}
+
+function getLang() {
+  if (localStorage.getItem('langKeyboard') !== null) {
+    keyboardSettings.lang = localStorage.getItem('langKeyboard');
   }
 }
 
 function langChange() {
   if (keyboardSettings.lang === 'en') {
     keyboardSettings.lang = 'ru';
+    localStorage.setItem('langKeyboard', keyboardSettings.lang);
     Array.from(document.querySelectorAll('.keyboard_key')).forEach((item, index) => {
       const keyItem = item;
       keyItem.textContent = keyLayouts.ru[index];
     });
   } else if (keyboardSettings.lang === 'ru') {
     keyboardSettings.lang = 'en';
+    localStorage.setItem('langKeyboard', keyboardSettings.lang);
     Array.from(document.querySelectorAll('.keyboard_key')).forEach((item, index) => {
       const keyItem = item;
       keyItem.textContent = keyLayouts.en[index];
@@ -210,7 +218,13 @@ function keysCheckCode(code, text, event) {
   } else if (code === 999) {
     langChange();
   } else {
-    keyboardSettings.value += text;
+    keyboardSettings.value = keyboardSettings.value.slice(0, keyboardSettings.cursorPosition)
+      + text + keyboardSettings.value.slice(keyboardSettings.cursorPosition);
+    keyboardSettings.cursorPosition += 1;
+    setTimeout(() => {
+      document.querySelector('.input_field').selectionEnd = keyboardSettings.cursorPosition;
+      document.querySelector('.input_field').selectionStart = keyboardSettings.cursorPosition;
+    }, 1);
   }
 }
 
@@ -251,6 +265,7 @@ function keyboardKeysToggle() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+  getLang();
   createElements();
   createKeyboardKeys();
   textfieldCheck();
