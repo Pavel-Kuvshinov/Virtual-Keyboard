@@ -6,6 +6,7 @@
 }
 
 .main {
+  font-family: 'Consolas', 'Courier New', Courier, monospace;
   min-height: 100vh;
   background-color: #494949;
   display: flex;
@@ -18,6 +19,10 @@
 }
 
 .input_field {
+  font-family: 'Consolas', 'Courier New', Courier, monospace;
+  font-size: 18px;
+  border: none;
+  outline: none;
   max-width: 915px;
   width: 100%;
   height: 175px;
@@ -100,6 +105,11 @@
     font-size: 14px;
   }
 
+  .input_field {
+    max-width: 729px;
+    font-size: 14px;
+  }
+
   .keyboard {
     max-width: 736px;
     grid-template-columns: repeat(30, 20px);
@@ -119,9 +129,14 @@
     font-size: 10px;
   }
 
+  .input_field {
+    font-size: 10px;
+    max-width: 548px;
+  }
+
   .keyboard {
     padding: 5px;
-    max-width: 736px;
+    max-width: 548px;
     grid-template-columns: repeat(30, 15px);
     grid-template-rows: repeat(5, 30px);
     grid-gap: 3px;
@@ -137,6 +152,11 @@
 
   .main {
     padding: 10px;
+    font-size: 7px;
+  }
+
+  .input_field {
+    max-width: 364px;
     font-size: 7px;
   }
 
@@ -158,6 +178,11 @@
 
   .main {
     padding: 10px;
+    font-size: 6px;
+  }
+
+  .input_field {
+    max-width: 290px;
     font-size: 6px;
   }
 

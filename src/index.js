@@ -43,6 +43,9 @@ const keyboardSettings = {
   capsLock: false,
   shift: false,
   cursorPosition: 0,
+  currentLine: 0,
+  totalLines: 0,
+  linesLength: [],
 };
 
 function createElements() {
@@ -180,15 +183,93 @@ function langChange() {
   }
 }
 
+function countTextfieldLines() {
+  keyboardSettings.totalLines = 0;
+  const textFieldInnerWidth = document.querySelector('.input_field').clientWidth
+    - Number((window.getComputedStyle(document.querySelector('.input_field'), null).getPropertyValue('padding-left')).slice(0, -2)) * 2 - 1;
+  const linesArr = keyboardSettings.value.split('\n');
+  linesArr.forEach((item) => {
+    // keyboardSettings.linesLength.push(item.length);
+    keyboardSettings.linesLength.push(item.length + 1);
+    const textMem = document.createElement('p');
+    textMem.style.position = 'relative';
+    document.querySelector('.main').prepend(textMem);
+    textMem.textContent = item;
+    const textFieldTextWidth = textMem.clientWidth;
+    textMem.remove();
+    if (textFieldTextWidth - textFieldInnerWidth > 0) {
+      keyboardSettings.totalLines += Math.ceil(textFieldTextWidth / textFieldInnerWidth);
+    } else {
+      keyboardSettings.totalLines += 1;
+    }
+  });
+  keyboardSettings.linesLength[keyboardSettings.linesLength.length
+    - 1] = keyboardSettings.linesLength[keyboardSettings.linesLength.length - 1] - 1;
+}
+
+function upButtonToggle() {
+  countTextfieldLines();
+  // console.log(keyboardSettings.totalLines);
+  // console.log(keyboardSettings.linesLength);
+  // console.log(keyboardSettings.linesLength.reduce((a, b) => a + b, 0));
+  // console.log(keyboardSettings.cursorPosition);
+}
+
 function keysCheckCode(code, text, event) {
-  if ((event.ctrlKey && event.shiftKey) || (event.altKey && event.shiftKey)) {
+  // language button
+  if ((event.ctrlKey && event.shiftKey) || (event.altKey && event.shiftKey) || code === 999) {
     langChange();
+  } else if (code === 38) {
+    // console.log('Up');
+    upButtonToggle();
+    keyboardSettings.value = `${keyboardSettings.value.slice(0, keyboardSettings.cursorPosition)
+    }▲${keyboardSettings.value.slice(keyboardSettings.cursorPosition)}`;
+    keyboardSettings.cursorPosition += 1;
+  } else if (code === 37) {
+    keyboardSettings.value = `${keyboardSettings.value.slice(0, keyboardSettings.cursorPosition)
+    }◄${keyboardSettings.value.slice(keyboardSettings.cursorPosition)}`;
+    keyboardSettings.cursorPosition += 1;
+    // console.log('Left');
+    /*
+    keyboardSettings.cursorPosition -= 1;
+    setTimeout(() => {
+      document.querySelector('.input_field').selectionEnd = keyboardSettings.cursorPosition;
+      document.querySelector('.input_field').selectionStart = keyboardSettings.cursorPosition;
+    }, 1);
+    document.querySelector('.input_field').focus();
+    */
+  } else if (code === 40) {
+    // console.log('Down');
+    keyboardSettings.value = `${keyboardSettings.value.slice(0, keyboardSettings.cursorPosition)
+    }▼${keyboardSettings.value.slice(keyboardSettings.cursorPosition)}`;
+    keyboardSettings.cursorPosition += 1;
+  } else if (code === 39) {
+    // console.log('Right');
+    keyboardSettings.value = `${keyboardSettings.value.slice(0, keyboardSettings.cursorPosition)
+    }►${keyboardSettings.value.slice(keyboardSettings.cursorPosition)}`;
+    keyboardSettings.cursorPosition += 1;
+    /*
+    keyboardSettings.cursorPosition += 1;
+    setTimeout(() => {
+      document.querySelector('.input_field').selectionEnd = keyboardSettings.cursorPosition;
+      document.querySelector('.input_field').selectionStart = keyboardSettings.cursorPosition;
+    }, 1);
+    document.querySelector('.input_field').focus();
+    */
   } else if (code === 13) {
-    keyboardSettings.value += '\n';
+    // console.log('enter button');
+    keyboardSettings.value = `${keyboardSettings.value.slice(0, keyboardSettings.cursorPosition)
+    }\n${keyboardSettings.value.slice(keyboardSettings.cursorPosition)}`;
+    keyboardSettings.cursorPosition += 1;
   } else if (code === 8) {
     const propValue = keyboardSettings.value;
     keyboardSettings.value = propValue.substring(0, propValue.length - 1);
+    keyboardSettings.cursorPosition -= 1;
+    if (keyboardSettings.cursorPosition < 0) {
+      keyboardSettings.cursorPosition = 0;
+    }
   } else if (code === 46) {
+    // console.log('delete button');
     deleteToggle();
     document.querySelector('.input_field').focus();
     setTimeout(() => {
@@ -196,28 +277,35 @@ function keysCheckCode(code, text, event) {
       document.querySelector('.input_field').selectionStart = keyboardSettings.cursorPosition;
     }, 1);
   } else if (code === 9) {
-    keyboardSettings.value += '    ';
+    // console.log('tab button');
+    keyboardSettings.value = `${keyboardSettings.value.slice(0, keyboardSettings.cursorPosition)
+    }    ${keyboardSettings.value.slice(keyboardSettings.cursorPosition)}`;
+    keyboardSettings.cursorPosition += 4;
+    setTimeout(() => {
+      document.querySelector('.input_field').selectionEnd = keyboardSettings.cursorPosition;
+      document.querySelector('.input_field').selectionStart = keyboardSettings.cursorPosition;
+    }, 1);
   } else if (code === 20) {
+    // console.log('capslock button');
     capslockToggle();
   } else if (code === 16) {
+    // console.log('shift button');
     shiftToggle();
   } else if (code === 17) {
-    console.log('Ctrl'); // Ctrl button
+    // console.log('Ctrl button');
   } else if (code === 18) {
-    console.log('Alt'); // Alt button
+    // console.log('Alt button');
   } else if (code === 32) {
-    keyboardSettings.value += ' ';
-  } else if (code === 38) {
-    console.log('Up'); // Up button
-  } else if (code === 37) {
-    console.log('Left'); // Left button
-  } else if (code === 40) {
-    console.log('Down'); // Down button
-  } else if (code === 39) {
-    console.log('Right'); // Right button
-  } else if (code === 999) {
-    langChange();
+    // console.log('Space button');
+    keyboardSettings.value = `${keyboardSettings.value.slice(0, keyboardSettings.cursorPosition)
+    } ${keyboardSettings.value.slice(keyboardSettings.cursorPosition)}`;
+    keyboardSettings.cursorPosition += 1;
+    setTimeout(() => {
+      document.querySelector('.input_field').selectionEnd = keyboardSettings.cursorPosition;
+      document.querySelector('.input_field').selectionStart = keyboardSettings.cursorPosition;
+    }, 1);
   } else {
+    // console.log('text buttons');
     keyboardSettings.value = keyboardSettings.value.slice(0, keyboardSettings.cursorPosition)
       + text + keyboardSettings.value.slice(keyboardSettings.cursorPosition);
     keyboardSettings.cursorPosition += 1;
@@ -226,6 +314,7 @@ function keysCheckCode(code, text, event) {
       document.querySelector('.input_field').selectionStart = keyboardSettings.cursorPosition;
     }, 1);
   }
+  event.preventDefault();
 }
 
 function textfieldValueUpdate() {
@@ -253,9 +342,9 @@ function keyboardKeysClick() {
 function keyboardKeysToggle() {
   document.addEventListener('keydown', (e) => {
     if (keyLayouts.keyCodes.includes(e.keyCode)) {
-      keysCheckCode(e.keyCode, e.key, e);
-      textfieldValueUpdate();
       const key = document.querySelector(`.keyboard_key[data-key="${e.keyCode}"]`);
+      keysCheckCode(e.keyCode, key.textContent, e);
+      textfieldValueUpdate();
       key.classList.add('keyboard_key-active');
       document.addEventListener('keyup', () => {
         key.classList.remove('keyboard_key-active');
