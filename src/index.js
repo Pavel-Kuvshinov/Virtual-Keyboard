@@ -189,7 +189,6 @@ function countTextfieldLines() {
     - Number((window.getComputedStyle(document.querySelector('.input_field'), null).getPropertyValue('padding-left')).slice(0, -2)) * 2 - 1;
   const linesArr = keyboardSettings.value.split('\n');
   linesArr.forEach((item) => {
-    // keyboardSettings.linesLength.push(item.length);
     keyboardSettings.linesLength.push(item.length + 1);
     const textMem = document.createElement('p');
     textMem.style.position = 'relative';
@@ -209,10 +208,6 @@ function countTextfieldLines() {
 
 function upButtonToggle() {
   countTextfieldLines();
-  // console.log(keyboardSettings.totalLines);
-  // console.log(keyboardSettings.linesLength);
-  // console.log(keyboardSettings.linesLength.reduce((a, b) => a + b, 0));
-  // console.log(keyboardSettings.cursorPosition);
 }
 
 function keysCheckCode(code, text, event) {
@@ -226,18 +221,10 @@ function keysCheckCode(code, text, event) {
     }▲${keyboardSettings.value.slice(keyboardSettings.cursorPosition)}`;
     keyboardSettings.cursorPosition += 1;
   } else if (code === 37) {
+    // console.log('Left');
     keyboardSettings.value = `${keyboardSettings.value.slice(0, keyboardSettings.cursorPosition)
     }◄${keyboardSettings.value.slice(keyboardSettings.cursorPosition)}`;
     keyboardSettings.cursorPosition += 1;
-    // console.log('Left');
-    /*
-    keyboardSettings.cursorPosition -= 1;
-    setTimeout(() => {
-      document.querySelector('.input_field').selectionEnd = keyboardSettings.cursorPosition;
-      document.querySelector('.input_field').selectionStart = keyboardSettings.cursorPosition;
-    }, 1);
-    document.querySelector('.input_field').focus();
-    */
   } else if (code === 40) {
     // console.log('Down');
     keyboardSettings.value = `${keyboardSettings.value.slice(0, keyboardSettings.cursorPosition)
@@ -248,20 +235,13 @@ function keysCheckCode(code, text, event) {
     keyboardSettings.value = `${keyboardSettings.value.slice(0, keyboardSettings.cursorPosition)
     }►${keyboardSettings.value.slice(keyboardSettings.cursorPosition)}`;
     keyboardSettings.cursorPosition += 1;
-    /*
-    keyboardSettings.cursorPosition += 1;
-    setTimeout(() => {
-      document.querySelector('.input_field').selectionEnd = keyboardSettings.cursorPosition;
-      document.querySelector('.input_field').selectionStart = keyboardSettings.cursorPosition;
-    }, 1);
-    document.querySelector('.input_field').focus();
-    */
   } else if (code === 13) {
     // console.log('enter button');
     keyboardSettings.value = `${keyboardSettings.value.slice(0, keyboardSettings.cursorPosition)
     }\n${keyboardSettings.value.slice(keyboardSettings.cursorPosition)}`;
     keyboardSettings.cursorPosition += 1;
   } else if (code === 8) {
+    // console.log('backspace button');
     const propValue = keyboardSettings.value;
     keyboardSettings.value = propValue.substring(0, propValue.length - 1);
     keyboardSettings.cursorPosition -= 1;
