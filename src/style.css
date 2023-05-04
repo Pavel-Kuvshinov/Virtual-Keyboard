@@ -1,0 +1,201 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: #e7e7e7;
+}
+
+.main {
+  font-family: 'Consolas', 'Courier New', Courier, monospace;
+  min-height: 100vh;
+  background-color: #494949;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  gap: 20px;
+  font-size: 18px;
+}
+
+.input_field {
+  font-family: 'Consolas', 'Courier New', Courier, monospace;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  max-width: 915px;
+  width: 100%;
+  height: 175px;
+  border: 1px solid #414141;
+  background-color: #1e1e1e;
+  color: #858585;
+  padding: 5px;
+  -webkit-box-shadow: 1px 1px 3px 0px rgba(107, 107, 107, 0.41);
+  -moz-box-shadow: 1px 1px 3px 0px rgba(107, 107, 107, 0.41);
+  box-shadow: 1px 1px 3px 0px rgba(107, 107, 107, 0.41);
+}
+
+.keyboard {
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #3c3c3c;
+  max-width: 915px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(30, 25px);
+  grid-template-rows: repeat(5, 50px);
+  grid-gap: 5px;
+}
+
+.button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+.keyboard_key {
+  background-color: #1e1e1e;
+  color: #858585;
+  border-radius: 4px;
+  grid-column: span 2;
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-box-shadow: 1px 1px 3px 0px rgba(107, 107, 107, 0.41);
+  -moz-box-shadow: 1px 1px 3px 0px rgba(107, 107, 107, 0.41);
+  box-shadow: 1px 1px 3px 0px rgba(107, 107, 107, 0.41);
+  transition: all .1s ease;
+  font-size: 18px;
+}
+
+.keyboard_key:hover {
+  background-color: #252526;
+}
+
+.keyboard_key:active {
+  background-color: #2D2D2D;
+  border: 1px solid #808182;
+  border-radius: 10px;
+}
+
+.keyboard_key-active {
+  background-color: #2D2D2D;
+  border: 1px solid #808182;
+  border-radius: 10px;
+}
+
+.keyboard_key-medium {
+  grid-column: span 3;
+}
+
+.keyboard_key-wide {
+  grid-column: span 4;
+}
+
+.keyboard_key-wider {
+  grid-column: span 5;
+}
+
+.keyboard_key-widest {
+  grid-column: span 12;
+}
+
+@media (max-width: 970px) {
+
+  .main {
+    padding: 14px;
+    font-size: 14px;
+  }
+
+  .input_field {
+    max-width: 729px;
+    font-size: 14px;
+  }
+
+  .keyboard {
+    max-width: 736px;
+    grid-template-columns: repeat(30, 20px);
+    grid-template-rows: repeat(5, 40px);
+    grid-gap: 4px;
+  }
+
+  .keyboard_key {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 767px) {
+
+  .main {
+    padding: 10px;
+    font-size: 10px;
+  }
+
+  .input_field {
+    font-size: 10px;
+    max-width: 548px;
+  }
+
+  .keyboard {
+    padding: 5px;
+    max-width: 548px;
+    grid-template-columns: repeat(30, 15px);
+    grid-template-rows: repeat(5, 30px);
+    grid-gap: 3px;
+    font-size: 10px;
+  }
+
+  .keyboard_key {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+
+  .main {
+    padding: 10px;
+    font-size: 7px;
+  }
+
+  .input_field {
+    max-width: 364px;
+    font-size: 7px;
+  }
+
+  .keyboard {
+    padding: 3px;
+    max-width: 364px;
+    grid-template-columns: repeat(30, 10px);
+    grid-template-rows: repeat(5, 20px);
+    grid-gap: 2px;
+    font-size: 10px;
+  }
+
+  .keyboard_key {
+    font-size: 7px;
+  }
+}
+
+@media (max-width: 384px) {
+
+  .main {
+    padding: 10px;
+    font-size: 6px;
+  }
+
+  .input_field {
+    max-width: 290px;
+    font-size: 6px;
+  }
+
+  .keyboard {
+    padding: 3px;
+    max-width: 290px;
+    grid-template-columns: repeat(30, 7.5px);
+    grid-template-rows: repeat(5, 15px);
+    grid-gap: 2px;
+    font-size: 10px;
+  }
+
+  .keyboard_key {
+    font-size: 5px;
+  }
+}
